@@ -91,7 +91,7 @@ kubectl exec -it deployment/secure-app -n security-lab -- cat /mnt/secrets-store
 If the configuration is working correctly, the command returns the secret stored in Azure Key Vault:
 
 ```text
-SuperSecretP@ssw0rd123!
+Secret successfully retrieved from Azure Key Vault.
 ```
 
 > ⚠️ **Security Note:** This is a test credential created specifically for this security lab. Real production credentials should never be committed to source control.
