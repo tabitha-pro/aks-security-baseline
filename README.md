@@ -76,9 +76,66 @@ An `emptyDir` memory volume is mounted at `/tmp` so the container can operate sa
 
 ## 🧪 Verification & Testing
 
-To verify that secrets are successfully mounted without exposing credentials in environment variables, inspect the secret directly inside the running container:
+The deployment can be verified by confirming that the application successfully retrieves the secret from Azure Key Vault and mounts it inside the running container.
 
-### PowerShell
+### 🔍 Verify Secret Mount
+
+Run the following command in **PowerShell**:
 
 ```powershell
 kubectl exec -it deployment/secure-app -n security-lab -- cat /mnt/secrets-store/db-password
+```
+
+### 🔑 Expected Secret Output
+
+If the configuration is working correctly, the command returns the secret stored in Azure Key Vault:
+
+```text
+SuperSecretP@ssw0rd123!
+```
+
+> ⚠️ **Security Note:** This is a test credential created specifically for this security lab. Real production credentials should never be committed to source control.
+
+---
+
+## 🛡️ Security Controls Implemented
+
+### 🔐 Identity & Access
+
+- **Workload Identity + OIDC** — Enables passwordless authentication between AKS and Azure.
+- **Managed Identity** — Eliminates hardcoded Azure credentials.
+- **Azure RBAC** — Provides least-privilege `Key Vault Secrets User` access.
+
+### 🔒 Secrets Management
+
+- **Azure Key Vault** — Provides centralized secret management.
+- **Secrets Store CSI Driver** — Retrieves secrets dynamically at runtime.
+
+### 🛡️ Container Hardening
+
+- **Non-Root Container** — Reduces container execution privileges.
+- **Read-Only Filesystem** — Limits unauthorized filesystem modification.
+- **Dropped Linux Capabilities** — Reduces the container attack surface.
+
+---
+
+## 🛠️ Key Technologies Used
+
+| Category | Technologies |
+|---|---|
+| **Cloud** | Azure Kubernetes Service (AKS), Azure Key Vault, Azure Managed Identities |
+| **Identity & Security** | Microsoft Entra Workload Identity (OIDC), Azure RBAC |
+| **Infrastructure as Code** | Terraform |
+| **Containers & Tooling** | Kubernetes, Secrets Store CSI Driver, Nginx, `kubectl`, Helm |
+
+---
+
+## 🚀 Push Changes to GitHub
+
+After updating the README, commit and push your changes:
+
+```powershell
+git add README.md
+git commit -m "docs: update security architecture README"
+git push
+```
