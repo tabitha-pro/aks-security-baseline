@@ -34,6 +34,8 @@ aks-security-baseline/
     ├── outputs.tf                    # Cluster details, OIDC Issuer URL, and Key Vault ID
     ├── providers.tf                  # AzureRM and Helm/Kubernetes provider setup
     └── variables.tf                  # Configurable deployment inputs and Azure regions
+
+```
 ## 🚀 How It Works (Step-by-Step)
 
 ### 1. Infrastructure Provisioning (`/terraform`)
