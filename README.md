@@ -34,3 +34,62 @@ aks-security-baseline/
     ├── outputs.tf                    # Cluster details, OIDC Issuer URL, and Key Vault ID
     ├── providers.tf                  # AzureRM and Helm/Kubernetes provider setup
     └── variables.tf                  # Configurable deployment inputs and Azure regions
+
+## 🚀 How It Works (Step-by-Step)
+
+### 1. Infrastructure Provisioning (`/terraform`)
+* **Cluster Deployment:** Terraform provisions an AKS cluster configured with **OIDC Issuer** and **Workload Identity** enabled.
+* **Vault & Identity Setup:** An Azure Key Vault instance and a User Assigned Managed Identity are deployed.
+* **Least-Privilege RBAC:** Fine-grained Azure RBAC roles (`Key Vault Secrets User`) are assigned to the Managed Identity, scoped specifically to the Key Vault.
+
+### 2. Passwordless Authentication (`k8s/05-workload-identity.yaml`)
+* **ServiceAccount Annotation:** A Kubernetes `ServiceAccount` is annotated with the Azure Managed Identity Client ID.
+* **Federated Identity Trust:** Azure establishes a federated identity trust between the AKS OIDC Issuer URL and the Azure Managed Identity.
+
+### 3. Hardened Deployment & Secret Mounting (`k8s/06-secure-deployment.yaml`)
+* **CSI Provider Integration:** The `SecretProviderClass` configures the CSI driver to fetch `db-password` from Azure Key Vault.
+* **Secure Volume Mounting:** An unprivileged container (`nginxinc/nginx-unprivileged:alpine`) mounts the secret in a read-only volume (`/mnt/secrets-store`).
+* **Runtime Memory Buffer:** An `emptyDir` memory volume is mounted at `/tmp` so the container can operate safely under `readOnlyRootFilesystem: true`.
+
+---
+
+## 🧪 Verification & Testing
+
+To verify that secrets are successfully mounted without exposing credentials in environment variables, inspect the secret directly inside the running container:
+
+**PowerShell:**
+```powershell
+kubectl exec -it deployment/secure-app -n security-lab -- cat /mnt/secrets-store/db-password
+
+> **Expected Output:**
+```text
+SuperSecretP@ssw0rd123!
+
+🔐 Security Controls
+Workload Identity + OIDC — passwordless authentication between AKS and Azure
+Managed Identity — eliminates hardcoded Azure credentials
+Azure RBAC — least-privilege Key Vault Secrets User access
+Azure Key Vault — centralized secret management
+Secrets Store CSI Driver — retrieves secrets at runtime
+Non-root container — reduces container privileges
+Read-only filesystem — limits filesystem modification
+Dropped Linux capabilities — reduces attack surface
+
+🛠️ Technologies
+Category	Technologies
+Cloud	Azure, AKS
+IaC	Terraform
+Identity	Microsoft Entra Workload Identity, OIDC
+Security	Azure RBAC, Key Vault
+Containers	Kubernetes, Nginx
+Secrets	Secrets Store CSI Driver
+Tools	kubectl, Helm
+
+Step 2: Push it to GitHub
+Run these commands in PowerShell:
+
+PowerShell
+git add README.md
+git commit -m "docs: add beginner-friendly architecture README"
+git push
+
