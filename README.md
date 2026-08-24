@@ -67,3 +67,33 @@ Expected Output:
 
 Plaintext
 SuperSecretP@ssw0rd123!
+
+🔐 Security Controls Implemented
+Workload Identity + OIDC: Passwordless authentication between AKS and Azure.
+
+Managed Identity: Eliminates hardcoded Azure credentials.
+
+Azure RBAC: Least-privilege Key Vault Secrets User access.
+
+Azure Key Vault: Centralized secret management.
+
+Secrets Store CSI Driver: Retrieves secrets dynamically at runtime.
+
+Non-Root Container: Reduces container privileges.
+
+Read-Only Filesystem: Limits filesystem modification risks.
+
+Dropped Linux Capabilities: Reduces attack surface.
+
+🛠️ Key Technologies Used
+
+| Category   | Technologies                            |
+| ---------- | --------------------------------------- |
+| Cloud      | Azure, AKS                              |
+| IaC        | Terraform                               |
+| Identity   | Microsoft Entra Workload Identity, OIDC |
+| Security   | Azure RBAC, Key Vault                   |
+| Containers | Kubernetes, Nginx                       |
+| Secrets    | Secrets Store CSI Driver                |
+| Tools      | kubectl, Helm                           |
+
