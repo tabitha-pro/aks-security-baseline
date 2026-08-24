@@ -1,0 +1,10 @@
+# Ignore Terraform state & local provider caches
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Operating system / IDE artifacts
+.DS_Store
+Thumbs.db
+.vscode/
