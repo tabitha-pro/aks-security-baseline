@@ -9,7 +9,7 @@ This repository demonstrates how to manage cloud infrastructure and container wo
 ## 🎯 What This Project Accomplishes
 
 * **Zero Hardcoded Credentials:** The application pod authenticates to Azure Key Vault securely using **OIDC Workload Identity Federation** instead of static passwords, tokens, or Service Principal secrets.
-* **Secure Secret Injection:** Secrets are retrieved from Azure Key Vault at pod startup and mounted directly into memory as read-only files using the **Secrets Store CSI Driver**.
+* **Secure Secret Injection:** Secrets are retrieved from Azure Key Vault at pod startup and mounted as read-only files using the Secrets Store CSI Driver, without exposing credentials through environment variables.
 * **Hardened Pod Security Context:** Enforces Kubernetes security best practices to prevent unauthorized privilege escalation and root access inside the container:
   * `readOnlyRootFilesystem: true`
   * `runAsNonRoot: true` (UID `101`)
